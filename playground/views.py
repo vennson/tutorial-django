@@ -1,11 +1,20 @@
 from django.shortcuts import render
 from django.http import HttpResponse
-
-def calculate():
-  x = 1
-  y = 2
-  return x
+from django.core.exceptions import ObjectDoesNotExist
+from django.db.models import Q, F
+from store.models import Product, Customer, Collection, Order, OrderItem
 
 def sayHello(request):
-  x = calculate()
-  return render(request, 'hello.html', {'name': 'bens'})
+  queryset = Order.objects.select_related(
+    'customer').prefetch_related(
+    'orderitem_set__product').order_by(
+    '-placed_at')[:5]
+      
+  return render(
+    request,
+    'hello.html', 
+    {
+      'name': 'bens', 
+      'results': list(queryset),
+    },
+  )

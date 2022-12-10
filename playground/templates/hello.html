@@ -5,5 +5,10 @@
     {% else %}
     <h1>hello stranger</h1>
     {% endif %}
+    <ul>
+      {% for result in results %}
+      <li>{{ result.placed_at }} -> {{ result.id }} - {{ result.customer.first_name }} - {{ result.orderitem_set.all.0.product.title }}</li>
+      {% endfor %}
+    </ul>
   </body>
 </html>
